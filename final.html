@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1A2B Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        #guess-area {
+            margin-bottom: 20px;
+        }
+
+        #guess-input {
+            padding: 8px;
+            font-size: 16px;
+            width: 180px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 8px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>1A2B Game</h1>
+        <div id="guess-area">
+            <input type="text" id="guess-input" maxlength="4" placeholder="Enter your guess">
+            <button onclick="checkGuess()">Guess</button>
+        </div>
+        <div id="result"></div>
+    </div>
+    <script>
+        let answer = generateAnswer();
+
+        function generateAnswer() {
+            let numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+            let answer = [];
+
+            for (let i = 0; i < 4; i++) {
+                let index = Math.floor(Math.random() * numbers.length);
+                answer.push(numbers[index]);
+                numbers.splice(index, 1);
+            }
+
+            return answer;
+        }
+
+        function checkGuess() {
+            let guess = document.getElementById('guess-input').value;
+
+            if (guess.length !== 4 || !/^\d{4}$/.test(guess)) {
+                alert("Please enter a 4-digit number.");
+                return;
+            }
+
+            let guessArray = guess.split('').map(Number);
+            let a = 0, b = 0;
+
+            for (let i = 0; i < 4; i++) {
+                if (guessArray[i] === answer[i]) {
+                    a++;
+                } else if (answer.includes(guessArray[i])) {
+                    b++;
+                }
+            }
+
+            let result = document.getElementById('result');
+            result.textContent = `${a}A${b}B`;
+
+            if (a === 4) {
+                result.style.color = 'green';
+                result.textContent = 'Congratulations! You guessed the correct number!';
+            } else {
+                result.style.color = 'black';
+            }
+
+            document.getElementById('guess-input').value = '';
+        }
+    </script>
+</body>
+</html>
